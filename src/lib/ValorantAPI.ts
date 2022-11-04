@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { APIResponse } from "./Response";
 import { ValorantAPIError } from "./ValorantAPIError";
 
 export class ValorantAPI {
@@ -10,16 +11,7 @@ export class ValorantAPI {
     }
 
     private _parseresponse(response: AxiosResponse) {
-        return {
-            status: response.status,
-            data: response.data,
-            ratelimits: {
-                used: Number(response.headers['x-ratelimit-limit']),
-                remaining: Number(response.headers['x-ratelimit-remaining']),
-                reset: Number(response.headers['x-ratelimit-reset']),
-            },
-            url: response.config.url,
-        };
+        return new APIResponse(response);
     }
 
     private async _request(info: { endpoint: string, rType?: any, params?: {} }) {
